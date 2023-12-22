@@ -17,16 +17,16 @@ size(), возвращающий установленную длину. Если
 устанавливаются конструктором.
 """
 
-from random import randint
-
-
 class Polinom:
     MAX_SIZE = 100
 
-    def __init__(self, coefficients):
+    def __init__(self, coefficients=None):
         # Проверяем, что переданный список коэффициентов имеет правильный размер
-        assert len(coefficients) <= 100, "Размер списка коэффициентов превышает 100"
+        if coefficients is None:
+            coefficients = [0] * self.MAX_SIZE
+        assert len(coefficients) <= self.MAX_SIZE, "Размер списка коэффициентов превышает 100"
         self.coefficients = coefficients
+        self.count = len(coefficients)
 
     def size(self):
         # Размер списка
@@ -34,12 +34,14 @@ class Polinom:
 
     def __repr__(self):
         # Переопределение метода для красивого вывода полинома
-        terms = []
-        for i, coef in enumerate(self.coefficients):
-            if coef != 0:
-                term = f"{coef}" if i == 0 else f"{coef}x^{i}"
-                terms.append(term)
+        terms = [f"{coef}x^{i}" if coef != 0 and i > 0 else str(coef) for i, coef in enumerate(self.coefficients)]
         return " + ".join(terms)
+
+    def read(self):
+        #Ввод с клавиатуры
+        input_string = input("Введите коэффициенты полинома через пробел: ")
+        coefficients = [float(coef) for coef in input_string.split()]
+        return Polinom(coefficients)
 
     def __add__(self, other):
         # Сложение полиномов
@@ -94,9 +96,8 @@ class Polinom:
 
 if __name__ == "__main__":
     poly1 = Polinom([1, 2, 3])
-    poly2 = Polinom([4, 5, 6])
+    poly2 = Polinom().read()
 
-    # Выполняем операции
     sum_poly = poly1 + poly2
     diff_poly = poly1 - poly2
     mul_poly = poly1 * poly2
@@ -104,7 +105,6 @@ if __name__ == "__main__":
     derivative_poly = poly1.differentiate()
     integral_poly = poly1.integrate()
 
-    # Выводим результаты
     print("Первый полином: ", poly1)
     print("Второй полином: ", poly2)
     print("Сумма:", sum_poly)
