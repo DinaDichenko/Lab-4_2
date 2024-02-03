@@ -17,6 +17,7 @@ size(), возвращающий установленную длину. Если
 устанавливаются конструктором.
 """
 
+
 class Polinom:
     MAX_SIZE = 100
 
@@ -24,7 +25,9 @@ class Polinom:
         # Проверяем, что переданный список коэффициентов имеет правильный размер
         if coefficients is None:
             coefficients = [0] * self.MAX_SIZE
-        assert len(coefficients) <= self.MAX_SIZE, "Размер списка коэффициентов превышает 100"
+        assert (
+            len(coefficients) <= self.MAX_SIZE
+        ), "Размер списка коэффициентов превышает 100"
         self.coefficients = coefficients
         self.count = len(coefficients)
 
@@ -34,11 +37,14 @@ class Polinom:
 
     def __repr__(self):
         # Переопределение метода для красивого вывода полинома
-        terms = [f"{coef}x^{i}" if coef != 0 and i > 0 else str(coef) for i, coef in enumerate(self.coefficients)]
+        terms = [
+            f"{coef}x^{i}" if coef != 0 and i > 0 else str(coef)
+            for i, coef in enumerate(self.coefficients)
+        ]
         return " + ".join(terms)
 
     def read(self):
-        #Ввод с клавиатуры
+        # Ввод с клавиатуры
         input_string = input("Введите коэффициенты полинома через пробел: ")
         coefficients = [float(coef) for coef in input_string.split()]
         return Polinom(coefficients)
